@@ -29,6 +29,7 @@
                                         <th>수정일</th>
                                     </tr>
                                 </thead>
+                                <!-- 게시판 리스트 반복문 -->
 						<c:forEach items="${list}" var="board">
 						<tr>
 						<td><c:out value="${board.bno}"/></td>
@@ -39,6 +40,25 @@
 						</tr>
 						</c:forEach>
                             </table>
+                          <!-- start 페이지 나누기 -->
+                            <div class="text-center">
+                            	<ul class="pagination">
+                            		<c:if test="${pageMaker.prev}">
+                            			<li class="paginate_button previous"><a href="${pageMaker.startPage -1}">이전</a></li>
+                            		</c:if>
+                            		
+                            		<c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+                            			<li class="paginate_button ${pageMaker.cri.pageNum == num ? "active":""}"><a href="${num}">${num}</a></li>
+                            		</c:forEach>
+                            		
+                            		<c:if test="${pageMaker.next}">
+                            			<li class="paginate_button next"><a href="${pageMaker.endPage +1}">다음</a></li>
+                            		</c:if>
+                            	</ul>
+                            </div>
+                            <!-- end 페이지나누기 -->                               
+                            
+                            
                               <!-- 모달창 -->
                             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -61,6 +81,14 @@
                     </div>   <!-- /.panel -->
                 </div>      <!-- /.col-lg-12 -->
             </div>       <!-- /.row -->
+<!-- 페이지 링크 값을 넘기기 위한 폼 :
+주소줄에 가지고 다녀야하는 값이 여러개여서 폼을 하나짜서 움직임. 
+value값 잘 넘어왔는지 확인하려면 F12 source에서 확인 -->
+<form action="actionForm" action="/board/list" method='get'>
+	<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}" />
+	<input type="hidden" name="amount" value="${pageMaker.cri.amount}" />
+	
+</form> 
 <script>
 $(document).ready(function(){
 	//컨트롤러 register에서 글 등록 성공시 글번호를 result 에 담아서 보내준다.
@@ -87,6 +115,23 @@ $(document).ready(function(){
 	$("#regBtn").on("click", function(){
 		self.location = "/board/register";
 	})
+	
+	//페이지 번호를 클릭시 이동
+ 	var actionForm = $("#actionForm");
+	
+	$(".paginate_button a").on("click", function(e){
+	
+		e.preventDefault(); //이벤트막기
+		
+		var targetPage = $(this).attr("href");
+		
+		console.log(targetPage)//클릭한 페이지 번호 보여주기
+		
+		actionForm.find("input[name='pageNum']").val(targetPage); //pageNum 값은 href값으로 변경
+		actionForm.submit();
+	}) 
+
+	
 })
 </script>
 <%@include file="../includes/footer.jsp" %>

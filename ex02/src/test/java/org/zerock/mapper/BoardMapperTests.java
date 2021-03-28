@@ -3,6 +3,7 @@ package org.zerock.mapper;
 import static org.junit.Assert.fail;
 
 import java.sql.Connection;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.Criteria;
+import org.zerock.domain.PageDTO;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -84,5 +87,28 @@ public class BoardMapperTests {
 		log.info("UPDATE COUNT: " + count);
 	}
 	
+	//페이징 테스트
+	@Test
+	public void testPaging() {
+		
+		Criteria cri = new Criteria();
+		//15개씩 3페이지
+		cri.setPageNum(2);
+		cri.setAmount(30);
+		
+		List<BoardVO> list = mapper.getListWithPaging(cri);
+		
+		list.forEach(board -> log.info(""+board.getBno()));
+	}
+	
+	@Test
+	public void testPageDTO() {
+		Criteria cri = new Criteria();
+		cri.setPageNum(52);
+		
+		PageDTO pageDTO = new PageDTO(cri, 771);
+		log.info(""+pageDTO);
+		
+	}
 }
 
