@@ -22,6 +22,9 @@
       <div class="panel-body">
       
       <form role="form" action="/board/modify" method="post">
+      <!-- 삭제, 리스트 페이지로 넘어갈때 넘겨줄 페이지번호, 페이지 갯수 -->
+<input type="hidden" name='pageNum' value='<c:out value="${cri.pageNum}"/>'>
+<input type="hidden" name='amount' value='<c:out value="${cri.amount}"/>'>
       
           <div class="form-group">
             <label>Bno</label> <input class="form-control" name='bno' value='<c:out value="${board.bno}"/>' readonly="readonly">
@@ -65,12 +68,21 @@ $(document).ready(function(){
 		var operation = $(this).data("oper");
 		
 		console.log(operation);
-		
-		if(operation === 'remove') { //remove 버튼을 누르면 remove 페이지로 이동
+		//remove 버튼을 누르면 remove 페이지로 이동
+		if(operation === 'remove') { 
 			formObj.attr("action", "/board/remove");
-		}else if(operation === 'list'){ //list 버튼을 누르면 list페이지로 이동
+			
+		//list 버튼을 누르면 list페이지로 이동
+		}else if(operation === 'list'){ 
 			formObj.attr("action", "/board/list").attr("method", "get");
-			formObj.empty(); // 폼태그의 모든 내용 삭제후 get방식으로 이동
+			
+			var pageNumTag = $("input[name='pageNum']").clone();
+			var amountTag = $("input[name='amount']").clone();
+			
+			//폼태그의 모든 내용 삭제후 pageNum, amount를 담아 get방식으로 이동
+			formObj.empty(); 
+			formObj.append(pageNumTag);
+			formObj.append(amountTag);
 		}
 		formObj.submit();
 	})

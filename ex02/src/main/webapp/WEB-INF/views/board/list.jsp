@@ -33,7 +33,8 @@
 						<c:forEach items="${list}" var="board">
 						<tr>
 						<td><c:out value="${board.bno}"/></td>
-						<td><a href="/board/get?bno=<c:out value='${board.bno}'/>"><c:out value="${board.title}"/></a></td>
+						<!-- 게시글 조회시 가지고 가는 번호 -->
+						<td><a class="move" href="<c:out value='${board.bno}'/>"><c:out value="${board.title}"/></a></td>
 						<td><c:out value="${board.writer}"/></td>
 						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.regdate}"/></td>
 						<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.updateDate}"/></td>
@@ -48,7 +49,8 @@
                             		</c:if>
                             		
                             		<c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-                            			<li class="paginate_button ${pageMaker.cri.pageNum == num ? "active":""}"><a href="${num}">${num}</a></li>
+                            			<li class="paginate_button ${pageMaker.cri.pageNum == num ? 'active':''}"><a href="${num}">${num}</a></li> 
+                              			
                             		</c:forEach>
                             		
                             		<c:if test="${pageMaker.next}">
@@ -72,7 +74,6 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
                                         </div>
                                     </div>   <!-- /.modal-content -->
                                 </div>  <!-- /.modal-dialog -->
@@ -84,7 +85,7 @@
 <!-- 페이지 링크 값을 넘기기 위한 폼 :
 주소줄에 가지고 다녀야하는 값이 여러개여서 폼을 하나짜서 움직임. 
 value값 잘 넘어왔는지 확인하려면 F12 source에서 확인 -->
-<form action="actionForm" action="/board/list" method='get'>
+<form id="actionForm" action="/board/list" method='get'>
 	<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}" />
 	<input type="hidden" name="amount" value="${pageMaker.cri.amount}" />
 	
@@ -130,7 +131,18 @@ $(document).ready(function(){
 		actionForm.find("input[name='pageNum']").val(targetPage); //pageNum 값은 href값으로 변경
 		actionForm.submit();
 	}) 
-
+	
+	//게시물 조회 클릭시 기존 a 태그의 /board/get?bno=bno 을 hidden 으로 전송
+	$(".move").on("click", function(e){
+		e.preventDefault(); //이벤트막기
+		//actionForm에 input 추가하여 경로이동
+		//결과값:http://localhost:8080/board/get?pageNum=1&amount=15&bno=776
+		actionForm.append("<input type='hidden' name='bno' value='"+ $(this).attr("href")+"'>");
+		actionForm.attr("action", "/board/get");
+		actionForm.submit();
+		
+	})
+	
 	
 })
 </script>

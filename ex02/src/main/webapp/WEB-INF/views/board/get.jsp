@@ -40,15 +40,16 @@
           <button data-oper="modify" class="btn btn-default" >Modify</button>
           <button data-oper="list" class="btn btn-info" >List</button>
 
-<!-- 수정 페이지로 넘어갈때 가지고 다니는 번호 -->
-				<form id='operForm' action="/board/modify" method="get">
-					<input type="hidden" id='bno' name='bno'
-						value='<c:out value="${board.bno}"/>'>
-				</form>
+<!-- 수정, 리스트 페이지로 넘어갈때 넘겨줄 폼 -->
+<form id='operForm' action="/board/modify" method="get">
+<input type="hidden" id='bno' name='bno' value='<c:out value="${board.bno}"/>'>
+<input type="hidden" name='pageNum' value='<c:out value="${cri.pageNum}"/>'>
+<input type="hidden" name='amount' value='<c:out value="${cri.amount}"/>'>
+
+</form>
 
 			</div>
       <!--  end panel-body -->
-
     </div>
     <!--  end panel-body -->
   </div>

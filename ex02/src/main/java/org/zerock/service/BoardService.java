@@ -17,4 +17,6 @@ public interface BoardService {
 	//전체조회-게시물 15개
 	//public List<BoardVO> getList();
 	public List<BoardVO> getList(Criteria cri);
+	//전체 게시물 수
+	public int getTotal(Criteria cri);
 }
