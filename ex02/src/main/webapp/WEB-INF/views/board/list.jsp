@@ -41,7 +41,37 @@
 						</tr>
 						</c:forEach>
                             </table>
-                          <!-- start 페이지 나누기 -->
+                            
+               <!-- 검색조건 처리 -->
+				<div class="row">
+					<div class="col-lg-12">
+
+						<form id="searchForm" action="/board/list" method="get">
+							<select name="type">
+								<option value=""
+								${pageMaker.cri.type == null?'selected':''}>---</option>
+								<option value="T"
+								${pageMaker.cri.type == 'T'?'selected':''}>제목</option>
+								<option value="C"
+								${pageMaker.cri.type == 'C'?'selected':''}>내용</option>
+								<option value="W"
+								${pageMaker.cri.type == 'W'?'selected':''}>작성자</option>
+								<option value="TC"
+								${pageMaker.cri.type == 'TC'?'selected':''}>제목 or 내용</option>
+								<option value="TW"
+								${pageMaker.cri.type == 'TW'?'selected':''}>제목 or 작성자</option>
+								<option value="TWC"
+								${pageMaker.cri.type == 'TWC'?'selected':''}>제목 or 내용 or 작성자</option>
+							</select> 
+							<input type="text" name="keyword" 	value="${pageMaker.cri.keyword}"/> 
+							<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}" /> 
+							<input type="hidden" name="amount" value="${pageMaker.cri.amount}" />
+							<button class="btn btn-default">Search</button>
+						</form>
+					</div>
+				</div>
+
+				<!-- start 페이지 나누기 -->
                             <div class="text-center">
                             	<ul class="pagination">
                             		<c:if test="${pageMaker.prev}">
@@ -88,7 +118,8 @@ value값 잘 넘어왔는지 확인하려면 F12 source에서 확인 -->
 <form id="actionForm" action="/board/list" method='get'>
 	<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}" />
 	<input type="hidden" name="amount" value="${pageMaker.cri.amount}" />
-	
+	<input type="hidden" name="type" value="<c:out value="${ pageMaker.cri.type }"/>"> 
+	<input type="hidden" name="keyword"	value="<c:out value="${ pageMaker.cri.keyword }"/>">
 </form> 
 <script>
 $(document).ready(function(){
@@ -143,7 +174,34 @@ $(document).ready(function(){
 		
 	})
 	
+	//검색버튼의 이벤트처리
+	//문제점1. 3페이지에 있다가 검색을 하면 3페이지로 이동
+	//문제점2. 검색 후 페이지 이동시 검색조건이 사라짐
+	//문제점3. 검색 후 화면에 어떤 조건.키워드를 이용했는지 알 수 없음
 	
+	//해결1. 검색은 1페이지로 이동하고 검색조건과 키워드를 보이게 처리
+	
+ 	var searchForm = $("#searchForm");
+	
+	$("#searchForm button").on("click", function(e){
+		e.preventDefault();
+		console.log("..............click");
+		
+		if(!searchForm.find("option:selected").val()){
+			alert("검색종류를 선택하세요");
+			return false;
+		}
+		
+		if(!searchForm.find("input[name='keyword']").val()){
+			alert("키워드를 입력하세요");
+			return false;
+		}
+
+		searchForm.find("input[name='pageNum']").val(1);
+		
+		
+		searchForm.submit();
+	})  
 })
 </script>
 <%@include file="../includes/footer.jsp" %>
