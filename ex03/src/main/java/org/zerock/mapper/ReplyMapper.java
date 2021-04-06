@@ -13,5 +13,9 @@ public interface ReplyMapper {
 	public int delete(int rno);
 	public int update(ReplyVO vo);
 	
+	//댓글 페이징처리
 	public List<ReplyVO> getListWithPaging(@Param("cri") Criteria cri, @Param("bno") int bno);
+	
+	//댓글 갯수
+	public int getCountByBno(int bno);
 }
