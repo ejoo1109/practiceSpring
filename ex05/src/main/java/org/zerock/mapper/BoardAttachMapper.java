@@ -9,4 +9,7 @@ public interface BoardAttachMapper {
 	public void insert(BoardAttachVO vo);
 	public void delete(String uuid);
 	public List<BoardAttachVO> findByBno(Long bno);
+	public void deleteAll(Long bno);
+	//데이터베이스와 맞지 않는 파일 지우기
+	public List<BoardAttachVO> getOldFiles();
 }

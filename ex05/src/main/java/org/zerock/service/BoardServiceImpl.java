@@ -51,22 +51,44 @@ public class BoardServiceImpl implements BoardService {
 		return mapper.read(bno);
 	}
 
+	@Transactional
 	@Override
 	public boolean modify(BoardVO board) {
 		log.info("modify....." + board);
 		
-		return mapper.update(board)==1; 
+		attachMapper.deleteAll(board.getBno());
+		
+		boolean modifyResult = mapper.update(board) == 1;
+		
+		if(modifyResult && board.getAttachList() != null && board.getAttachList().size() > 0) {
+			board.getAttachList().forEach(attach -> {
+				attach.setBno(board.getBno());
+				attachMapper.insert(attach);
+			});
+		}
+		
+		return modifyResult; 
 		//성공이면 1이 반환되어 ==사용하여 true, false로 사용한다.
 		// 또는 mapper.update(board)>0?true:false; 
 	}
 
+//	@Override
+//	public boolean remove(Long bno) {
+//		log.info("remove....." + bno);
+//		
+//		return mapper.delete(bno)==1;
+//	}
+
+	@Transactional
 	@Override
 	public boolean remove(Long bno) {
 		log.info("remove....." + bno);
 		
+		//게시글 작성시 db의 첨부파일 삭제
+		attachMapper.deleteAll(bno);
+		
 		return mapper.delete(bno)==1;
 	}
-
 //	@Override
 //	public List<BoardVO> getList() {
 //		log.info("getList ......");

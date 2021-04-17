@@ -25,6 +25,7 @@
   	<logger name="org.zerock.service" level="debug"/>
   	<logger name="org.zerock.mapper" level="debug"/>
   	<logger name="org.zerock.aop" level="debug"/>
+  	<logger name="org.zerock.task" level="debug"/>
 
 	<!-- 스프링 프레임워크 로깅 처리 -->
 	  	<logger name="org.springframework.core" level="info"/>

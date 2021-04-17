@@ -445,6 +445,7 @@ $(document).ready(function(){
 })
 
 </script>
+<!-- 첨부파일이 있는 게시글 조회 -->
 <script>
 $(document).ready(function(){
 	(function(){
@@ -484,7 +485,7 @@ $(document).ready(function(){
 	     
 	   })();//end function
 	   
-	  
+		//첨부파일 클릭시 다운로드 
 	  $(".uploadResult").on("click","li", function(e){
 	      
 	    console.log("view image");
@@ -500,10 +501,10 @@ $(document).ready(function(){
 	      self.location ="/download?fileName="+path
 	    }
 	    
-	    //첨부파일 보여주기
+	    //이미지 파일시 확대하여 보여주기
 	    function showImage(fileCallPath){
 		    
-	        alert(fileCallPath);
+	       // alert(fileCallPath);
 	        
 	        $(".bigPictureWrapper").css("display","flex").show();
 	        
